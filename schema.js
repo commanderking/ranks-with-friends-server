@@ -2,13 +2,21 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = require("graphql");
-const { FriendRatings, friends, activities } = require("./TestData");
+const {
+  FriendRatings,
+  friends,
+  activities,
+  activityRatings
+} = require("./TestData");
 const {
   TierActivity,
   Friend,
-  Activity
+  Activity,
+  Rating,
+  RatingWithFriendData
 } = require("./types/tiersActivityTypes");
 
 var queryType = new GraphQLObjectType({
@@ -32,15 +40,29 @@ var queryType = new GraphQLObjectType({
         return friends.filter(friend => friend.id === id);
       }
     },
-    activities: {
-      type: new GraphQLList(Activity),
+    activity: {
+      type: Activity,
+      args: {
+        activityId: { type: GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (_, { activityId }) => {
+        const activitiesForFriend = activities.filter(
+          activity => activity.activityId === activityId
+        );
+        return {
+          ...activitiesForFriend[0],
+          activityRatings
+        };
+      }
+    },
+    ratings: {
+      type: new GraphQLList(RatingWithFriendData),
       args: {
         activityId: { type: GraphQLString }
       },
+      // TODO: When database comes in, will need to filter by activityId
       resolve: (_, { activityId }) => {
-        return activities.filter(
-          activity => activity.activityId === activityId
-        );
+        return activityRatings;
       }
     }
   }

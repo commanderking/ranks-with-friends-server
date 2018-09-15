@@ -32,56 +32,79 @@ const activities = [
     ratingType: "Tiers",
     items: [
       {
-        id: "1",
+        itemId: "1",
         name: "The Once and Future King"
       },
       {
-        id: "2",
+        itemId: "2",
         name: "Billy Budd"
       },
       {
-        id: "3",
+        itemId: "3",
         name: "Rebecca"
       }
     ]
   }
 ];
 
+const example = {
+  "1": {
+    itemId: "1",
+    name: "The Once and Future King",
+    ratingsByFriend: {
+      friend123: "A",
+      friend456: "B"
+    },
+    overallScore: "A-",
+    numericScore: 0.75
+  },
+  "2": {
+    itemId: "2",
+    name: "Billy Budd",
+    ratingsByFriend: {
+      friend123: "C",
+      friend456: "C"
+    },
+    overallScore: "C",
+    numericScore: 0.5
+  }
+};
+
 // From Ratings Table: Collection of all ratings ever given - is this too large?
-const Ratings = [
+const activityRatings = [
   {
     activityId: "abc123",
     friendId: "friend123",
     ratings: [
       {
-        id: "1",
-        score: "S"
+        itemId: "1",
+        rating: "S"
       },
       {
-        id: "2",
-        score: "C"
+        itemId: "2",
+        rating: "C"
       },
       {
-        id: "3",
-        score: "A"
+        itemId: "3",
+        rating: "A"
       }
     ]
   },
   {
     activityId: "abc123",
-    friendId: "friend123",
+    friendId: "friend456",
     ratings: [
       {
-        id: "1",
-        score: "A+"
+        itemId: "1",
+        rating: "A+"
       },
       {
-        id: "2",
-        score: "C+"
+        itemId: "2",
+        rating: "C+"
       },
       {
-        id: "3",
-        score: "B+"
+        itemId: "3",
+        rating: "B+"
       }
     ]
   }
@@ -145,5 +168,6 @@ const FriendRatings = [
 module.exports = {
   friends,
   activities,
+  activityRatings,
   FriendRatings
 };
