@@ -4,8 +4,12 @@ const {
   GraphQLSchema,
   GraphQLList
 } = require("graphql");
-const { BooksTiers } = require("./TestData");
-const { TierActivity } = require("./types/tiersActivityTypes");
+const { FriendRatings, friends, activities } = require("./TestData");
+const {
+  TierActivity,
+  Friend,
+  Activity
+} = require("./types/tiersActivityTypes");
 
 var queryType = new GraphQLObjectType({
   name: "Query",
@@ -16,7 +20,27 @@ var queryType = new GraphQLObjectType({
         id: { type: GraphQLString }
       },
       resolve: function(_, { id }) {
-        return BooksTiers;
+        return FriendRatings;
+      }
+    },
+    friends: {
+      type: new GraphQLList(Friend),
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: (_, { id }) => {
+        return friends.filter(friend => friend.id === id);
+      }
+    },
+    activities: {
+      type: new GraphQLList(Activity),
+      args: {
+        activityId: { type: GraphQLString }
+      },
+      resolve: (_, { activityId }) => {
+        return activities.filter(
+          activity => activity.activityId === activityId
+        );
       }
     }
   }
