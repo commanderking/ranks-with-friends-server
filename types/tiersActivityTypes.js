@@ -5,6 +5,7 @@ const {
   activities,
   activityRatings
 } = require("../TestData");
+var mongo = require("mongodb");
 
 const friendScore = new GraphQLObjectType({
   name: "FriendScore",
@@ -76,27 +77,39 @@ const ActivityItem = new GraphQLObjectType({
   }
 });
 
-const Activity = new GraphQLObjectType({
-  name: "Activity",
-  fields: {
-    activityId: { type: GraphQLString },
-    title: { type: GraphQLString },
-    ratingType: { type: GraphQLString },
-    items: { type: new GraphQLList(ActivityItem) },
-    ratings: {
-      type: RatingWithFriendData,
-      resolve: () => {
-        return {
-          ...activityRatings[0],
-          // This should eventually use the friendId to search for friend data
-          // Thinking this should actually be its own type with resolver, something
-          // like friendInfo as a field that can be queriable only if needed
-          ...friends.find(friend => activityRatings[0].friendId === friend.id)
-        };
+const Activity = db =>
+  new GraphQLObjectType({
+    name: "Activity",
+    fields: {
+      activityId: { type: GraphQLString },
+      title: { type: GraphQLString },
+      ratingType: { type: GraphQLString },
+      items: { type: new GraphQLList(ActivityItem) },
+      ratings: {
+        type: new GraphQLList(RatingWithFriendData),
+        resolve: async activity => {
+          const activityId = activity._id;
+          const ratingsCollection = db.collection("activityRatings");
+          const ratings = await ratingsCollection
+            .find({
+              activityId: activityId.toString()
+            })
+            .toArray();
+
+          return ratings;
+          /*
+          return {
+            ratings,
+            // This should eventually use the friendId to search for friend data
+            // Thinking this should actually be its own type with resolver, something
+            // like friendInfo as a field that can be queriable only if needed
+            ...friends.find(friend => activityRatings[0].friendId === friend.id)
+          };
+          */
+        }
       }
     }
-  }
-});
+  });
 
 module.exports = {
   friendScore,

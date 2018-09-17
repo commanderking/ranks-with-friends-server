@@ -14,9 +14,11 @@
     "express-graphql": "^0.6.12",
     "graphql": "^14.0.2",
     "install": "^0.12.1",
+    "mongodb": "^3.1.6",
     "npm": "^6.4.1"
   },
   "devDependencies": {
+    "dotenv": "^6.0.0",
     "nodemon": "^1.18.4"
   }
 }

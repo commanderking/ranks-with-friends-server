@@ -1,0 +1,22 @@
+[
+  {
+    "username": "kgeezer",
+    "password": "kekekekekeweazer",
+    "firstName": "Allison",
+    "lastName": "King",
+    "image": "",
+    "myActivities": ["5b9d837ee7179a7a9fc653fc"],
+    "friendActivities": [],
+    "pendingActivities": []
+  },
+  {
+    "username": "koolkingkat",
+    "password": "kingkoolrool",
+    "firstName": "Jeffrey",
+    "lastName": "King",
+    "image": "",
+    "myActivities": [],
+    "friendActivities": ["5b9d837ee7179a7a9fc653fc"],
+    "pendingActivities": []
+  }
+]

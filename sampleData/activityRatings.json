@@ -1,0 +1,38 @@
+[
+  {
+    "activityId": "5b9d837ee7179a7a9fc653fc",
+    "friendId": "5b9d83af36437b9095cc3121",
+    "ratings": [
+      {
+        "itemId": "1",
+        "rating": "S"
+      },
+      {
+        "itemId": "2",
+        "rating": "C"
+      },
+      {
+        "itemId": "3",
+        "rating": "A"
+      }
+    ]
+  },
+  {
+    "activityId": "5b9d837ee7179a7a9fc653fc",
+    "friendId": "5b9d83af36437b9095cc3122",
+    "ratings": [
+      {
+        "itemId": "1",
+        "rating": "A+"
+      },
+      {
+        "itemId": "2",
+        "rating": "C+"
+      },
+      {
+        "itemId": "3",
+        "rating": "B+"
+      }
+    ]
+  }
+]

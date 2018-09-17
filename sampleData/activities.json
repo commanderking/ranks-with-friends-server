@@ -1,0 +1,20 @@
+[
+  {
+    "title": "High School Books",
+    "ratingType": "Tiers",
+    "items": [
+      {
+        "itemId": "1",
+        "name": "The Once and Future King"
+      },
+      {
+        "itemId": "2",
+        "name": "Billy Budd"
+      },
+      {
+        "itemId": "3",
+        "name": "Rebecca"
+      }
+    ]
+  }
+]

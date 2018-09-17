@@ -18,58 +18,71 @@ const {
   Rating,
   RatingWithFriendData
 } = require("./types/tiersActivityTypes");
+var mongo = require("mongodb");
 
-var queryType = new GraphQLObjectType({
-  name: "Query",
-  fields: {
-    getTiersActivity: {
-      type: new GraphQLList(TierActivity),
-      args: {
-        id: { type: GraphQLString }
+const createQueryWithDB = db =>
+  new GraphQLObjectType({
+    name: "Query",
+    fields: {
+      getTiersActivity: {
+        type: new GraphQLList(TierActivity),
+        args: {
+          id: { type: GraphQLString }
+        },
+        resolve: function(_, { id }) {
+          return FriendRatings;
+        }
       },
-      resolve: function(_, { id }) {
-        return FriendRatings;
-      }
-    },
-    friends: {
-      type: new GraphQLList(Friend),
-      args: {
-        id: { type: GraphQLString }
+      friend: {
+        type: Friend,
+        args: {
+          id: { type: GraphQLString }
+        },
+        resolve: async (_, { id }) => {
+          const friendsCollection = db.collection("friends");
+          return await friendsCollection.findOne({
+            _id: new mongo.ObjectID(id)
+          });
+        }
       },
-      resolve: (_, { id }) => {
-        return friends.filter(friend => friend.id === id);
-      }
-    },
-    activity: {
-      type: Activity,
-      args: {
-        activityId: { type: GraphQLNonNull(GraphQLString) }
+      activity: {
+        type: Activity(db),
+        args: {
+          activityId: { type: GraphQLNonNull(GraphQLString) }
+        },
+        resolve: async (_, { activityId }) => {
+          const activitiesCollection = db.collection("activities");
+          const activity = await activitiesCollection.findOne({
+            _id: new mongo.ObjectID(activityId)
+          });
+          return activity;
+          /*
+          const activitiesForFriend = activities.filter(
+            activity => activity.activityId === activityId
+          );
+          return {
+            ...activitiesForFriend[0],
+            activityRatings
+          };
+          */
+        }
       },
-      resolve: (_, { activityId }) => {
-        const activitiesForFriend = activities.filter(
-          activity => activity.activityId === activityId
-        );
-        return {
-          ...activitiesForFriend[0],
-          activityRatings
-        };
-      }
-    },
-    ratings: {
-      type: new GraphQLList(RatingWithFriendData),
-      args: {
-        activityId: { type: GraphQLString }
-      },
-      // TODO: When database comes in, will need to filter by activityId
-      resolve: (_, { activityId }) => {
-        return activityRatings;
+      ratings: {
+        type: new GraphQLList(RatingWithFriendData),
+        args: {
+          activityId: { type: GraphQLString }
+        },
+        // TODO: When database comes in, will need to filter by activityId
+        resolve: (_, { activityId }) => {
+          return activityRatings;
+        }
       }
     }
-  }
-});
+  });
 
-const schema = new GraphQLSchema({ query: queryType });
+const generateSchemaWithDB = db =>
+  new GraphQLSchema({ query: createQueryWithDB(db) });
 
 module.exports = {
-  schema
+  generateSchemaWithDB
 };
