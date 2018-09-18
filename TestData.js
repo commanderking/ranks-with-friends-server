@@ -75,7 +75,7 @@ const activityRatings = [
   {
     activityId: "abc123",
     friendId: "friend123",
-    ratings: [
+    itemRatings: [
       {
         itemId: "1",
         rating: "S"
@@ -93,7 +93,7 @@ const activityRatings = [
   {
     activityId: "abc123",
     friendId: "friend456",
-    ratings: [
+    itemRatings: [
       {
         itemId: "1",
         rating: "A+"

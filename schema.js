@@ -5,18 +5,11 @@ const {
   GraphQLList,
   GraphQLNonNull
 } = require("graphql");
-const {
-  FriendRatings,
-  friends,
-  activities,
-  activityRatings
-} = require("./TestData");
+const { FriendRatings } = require("./TestData");
 const {
   TierActivity,
   Friend,
-  Activity,
-  Rating,
-  RatingWithFriendData
+  Activity
 } = require("./types/tiersActivityTypes");
 var mongo = require("mongodb");
 
@@ -26,6 +19,7 @@ const createQueryWithDB = db =>
     fields: {
       getTiersActivity: {
         type: new GraphQLList(TierActivity),
+        deprecationReason: "Uses hardcoded test data",
         args: {
           id: { type: GraphQLString }
         },
@@ -52,29 +46,9 @@ const createQueryWithDB = db =>
         },
         resolve: async (_, { activityId }) => {
           const activitiesCollection = db.collection("activities");
-          const activity = await activitiesCollection.findOne({
+          return await activitiesCollection.findOne({
             _id: new mongo.ObjectID(activityId)
           });
-          return activity;
-          /*
-          const activitiesForFriend = activities.filter(
-            activity => activity.activityId === activityId
-          );
-          return {
-            ...activitiesForFriend[0],
-            activityRatings
-          };
-          */
-        }
-      },
-      ratings: {
-        type: new GraphQLList(RatingWithFriendData),
-        args: {
-          activityId: { type: GraphQLString }
-        },
-        // TODO: When database comes in, will need to filter by activityId
-        resolve: (_, { activityId }) => {
-          return activityRatings;
         }
       }
     }

@@ -15,10 +15,10 @@ const friendScore = new GraphQLObjectType({
   }
 });
 
+// TODO: Remove once deprecated getTierActivity can be removed
 const TierActivity = new GraphQLObjectType({
   name: "FriendCategory",
   fields: {
-    // TODO: rename books --> category once testData has changed over
     friend: { type: GraphQLString },
     title: { type: GraphQLString },
     ratings: { type: new GraphQLList(friendScore) }
@@ -53,13 +53,30 @@ const FriendRating = new GraphQLObjectType({
 const RatingFields = {
   activityId: { type: GraphQLString },
   friendId: { type: GraphQLString },
-  ratings: { type: new GraphQLList(FriendRating) }
+  itemRatings: { type: new GraphQLList(FriendRating) }
 };
 
 const Rating = new GraphQLObjectType({
   name: "Rating",
   fields: RatingFields
 });
+
+const RatingWithFriendInfo = db =>
+  new GraphQLObjectType({
+    name: "RatingWithFriendInfo",
+    fields: {
+      ...RatingFields,
+      friendInfo: {
+        type: Friend,
+        resolve: async activity => {
+          const friendsCollection = db.collection("friends");
+          return await friendsCollection.findOne({
+            _id: new mongo.ObjectID(activity.friendId)
+          });
+        }
+      }
+    }
+  });
 
 const RatingWithFriendData = new GraphQLObjectType({
   name: "RatingWithFriendData",
@@ -81,12 +98,12 @@ const Activity = db =>
   new GraphQLObjectType({
     name: "Activity",
     fields: {
-      activityId: { type: GraphQLString },
+      id: { type: GraphQLString, resolve: activity => activity._id.toString() },
       title: { type: GraphQLString },
       ratingType: { type: GraphQLString },
       items: { type: new GraphQLList(ActivityItem) },
-      ratings: {
-        type: new GraphQLList(RatingWithFriendData),
+      activityRatings: {
+        type: new GraphQLList(RatingWithFriendInfo(db)),
         resolve: async activity => {
           const activityId = activity._id;
           const ratingsCollection = db.collection("activityRatings");
@@ -95,24 +112,13 @@ const Activity = db =>
               activityId: activityId.toString()
             })
             .toArray();
-
           return ratings;
-          /*
-          return {
-            ratings,
-            // This should eventually use the friendId to search for friend data
-            // Thinking this should actually be its own type with resolver, something
-            // like friendInfo as a field that can be queriable only if needed
-            ...friends.find(friend => activityRatings[0].friendId === friend.id)
-          };
-          */
         }
       }
     }
   });
 
 module.exports = {
-  friendScore,
   TierActivity,
   Friend,
   Activity,
