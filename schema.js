@@ -46,9 +46,10 @@ const createQueryWithDB = db =>
         },
         resolve: async (_, { activityId }) => {
           const activitiesCollection = db.collection("activities");
-          return await activitiesCollection.findOne({
+          const activity = await activitiesCollection.findOne({
             _id: new mongo.ObjectID(activityId)
           });
+          return activity;
         }
       }
     }

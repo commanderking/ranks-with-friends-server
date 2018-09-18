@@ -1,4 +1,9 @@
-const { GraphQLList, GraphQLString, GraphQLObjectType } = require("graphql");
+const {
+  GraphQLList,
+  GraphQLString,
+  GraphQLObjectType,
+  GraphQLNonNull
+} = require("graphql");
 const {
   FriendRatings,
   friends,
@@ -26,9 +31,8 @@ const TierActivity = new GraphQLObjectType({
 });
 
 const FriendFields = {
-  id: { type: GraphQLString },
-  username: { type: GraphQLString },
-  password: { type: GraphQLString },
+  id: { type: GraphQLNonNull(GraphQLString) },
+  username: { type: GraphQLNonNull(GraphQLString) },
   firstName: { type: GraphQLString },
   lastName: { type: GraphQLString },
   image: { type: GraphQLString },
@@ -45,15 +49,18 @@ const Friend = new GraphQLObjectType({
 const FriendRating = new GraphQLObjectType({
   name: "FriendRating",
   fields: {
-    itemId: { type: GraphQLString },
+    itemId: { type: GraphQLNonNull(GraphQLString) },
     rating: { type: GraphQLString }
   }
 });
 
 const RatingFields = {
-  activityId: { type: GraphQLString },
-  friendId: { type: GraphQLString },
-  itemRatings: { type: new GraphQLList(FriendRating) }
+  activityId: { type: GraphQLNonNull(GraphQLString) },
+  friendId: { type: GraphQLNonNull(GraphQLString) },
+  itemRatings: {
+    type: new GraphQLNonNull(GraphQLList(GraphQLNonNull(FriendRating))),
+    resolve: activity => activity.itemRatings || []
+  }
 };
 
 const Rating = new GraphQLObjectType({
@@ -89,8 +96,8 @@ const RatingWithFriendData = new GraphQLObjectType({
 const ActivityItem = new GraphQLObjectType({
   name: "ActivityItem",
   fields: {
-    itemId: { type: GraphQLString },
-    name: { type: GraphQLString }
+    itemId: { type: GraphQLNonNull(GraphQLString) },
+    name: { type: GraphQLNonNull(GraphQLString) }
   }
 });
 
@@ -98,12 +105,20 @@ const Activity = db =>
   new GraphQLObjectType({
     name: "Activity",
     fields: {
-      id: { type: GraphQLString, resolve: activity => activity._id.toString() },
-      title: { type: GraphQLString },
-      ratingType: { type: GraphQLString },
-      items: { type: new GraphQLList(ActivityItem) },
+      id: {
+        type: GraphQLNonNull(GraphQLString),
+        resolve: activity => activity._id.toString()
+      },
+      title: { type: GraphQLNonNull(GraphQLString) },
+      ratingType: { type: GraphQLNonNull(GraphQLString) },
+      items: {
+        type: new GraphQLNonNull(GraphQLList(GraphQLNonNull(ActivityItem))),
+        resolve: activity => activity.items || []
+      },
       activityRatings: {
-        type: new GraphQLList(RatingWithFriendInfo(db)),
+        type: new GraphQLNonNull(
+          GraphQLList(GraphQLNonNull(RatingWithFriendInfo(db)))
+        ),
         resolve: async activity => {
           const activityId = activity._id;
           const ratingsCollection = db.collection("activityRatings");
@@ -112,7 +127,7 @@ const Activity = db =>
               activityId: activityId.toString()
             })
             .toArray();
-          return ratings;
+          return ratings || [];
         }
       }
     }
