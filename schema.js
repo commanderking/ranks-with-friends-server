@@ -11,7 +11,8 @@ const {
   Friend,
   Activity
 } = require("./types/tiersActivityTypes");
-var mongo = require("mongodb");
+const { createMutationsWithDB } = require("./mutations");
+const mongo = require("mongodb");
 
 const createQueryWithDB = db =>
   new GraphQLObjectType({
@@ -56,7 +57,10 @@ const createQueryWithDB = db =>
   });
 
 const generateSchemaWithDB = db =>
-  new GraphQLSchema({ query: createQueryWithDB(db) });
+  new GraphQLSchema({
+    query: createQueryWithDB(db),
+    mutation: createMutationsWithDB(db)
+  });
 
 module.exports = {
   generateSchemaWithDB

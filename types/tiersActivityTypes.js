@@ -68,9 +68,9 @@ const Rating = new GraphQLObjectType({
   fields: RatingFields
 });
 
-const RatingWithFriendInfo = db =>
+const RatingWithFriendInfo = (db, name) =>
   new GraphQLObjectType({
-    name: "RatingWithFriendInfo",
+    name: `RatingWithFriendInfo${name}`,
     fields: {
       ...RatingFields,
       friendInfo: {
@@ -101,42 +101,47 @@ const ActivityItem = new GraphQLObjectType({
   }
 });
 
+const ActivityFields = (db, name) => ({
+  id: {
+    type: GraphQLNonNull(GraphQLString),
+    resolve: activity => activity._id.toString()
+  },
+  title: { type: GraphQLNonNull(GraphQLString) },
+  ratingType: { type: GraphQLNonNull(GraphQLString) },
+  items: {
+    type: new GraphQLNonNull(GraphQLList(GraphQLNonNull(ActivityItem))),
+    resolve: activity => activity.items || []
+  },
+  activityRatings: {
+    type: new GraphQLNonNull(
+      GraphQLList(GraphQLNonNull(RatingWithFriendInfo(db, name)))
+    ),
+    resolve: async activity => {
+      const activityId = activity._id;
+      const ratingsCollection = db.collection("activityRatings");
+      const ratings = await ratingsCollection
+        .find({
+          activityId: activityId.toString()
+        })
+        .toArray();
+      return ratings || [];
+    }
+  }
+});
+
 const Activity = db =>
   new GraphQLObjectType({
     name: "Activity",
-    fields: {
-      id: {
-        type: GraphQLNonNull(GraphQLString),
-        resolve: activity => activity._id.toString()
-      },
-      title: { type: GraphQLNonNull(GraphQLString) },
-      ratingType: { type: GraphQLNonNull(GraphQLString) },
-      items: {
-        type: new GraphQLNonNull(GraphQLList(GraphQLNonNull(ActivityItem))),
-        resolve: activity => activity.items || []
-      },
-      activityRatings: {
-        type: new GraphQLNonNull(
-          GraphQLList(GraphQLNonNull(RatingWithFriendInfo(db)))
-        ),
-        resolve: async activity => {
-          const activityId = activity._id;
-          const ratingsCollection = db.collection("activityRatings");
-          const ratings = await ratingsCollection
-            .find({
-              activityId: activityId.toString()
-            })
-            .toArray();
-          return ratings || [];
-        }
-      }
-    }
+    fields: ActivityFields(db, "Query")
   });
 
 module.exports = {
   TierActivity,
   Friend,
   Activity,
+  ActivityFields,
+  FriendRating,
   Rating,
+  RatingFields,
   RatingWithFriendData
 };
