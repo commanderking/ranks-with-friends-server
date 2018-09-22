@@ -41,6 +41,40 @@ const createMutationsWithDB = db =>
           console.log("activity", activity);
           return activity;
         }
+      },
+      deleteActivityRatings: {
+        type: new GraphQLObjectType({
+          name: "DeleteActivityRating",
+          fields: {
+            // TODO: Add field for unsuccessful deletion?
+            ...ActivityFields(db, "MutationDeleteActivityRating")
+          }
+        }),
+        args: {
+          activityId: { type: GraphQLNonNull(GraphQLString) },
+          friendId: { type: GraphQLNonNull(GraphQLString) }
+        },
+        resolve: async (_, { activityId, friendId }) => {
+          // TODO: Error handling for when insertion does not work
+          const deletedResult = await db
+            .collection("activityRatings")
+            .deleteOne({
+              activityId,
+              friendId
+            });
+
+          /*
+            TODO: Throw error or return value if deletedCount is 0
+          console.log("deletedResult", deletedResult);
+          console.log("deletedCount", deletedResult.deletedCount);
+          */
+
+          const activitiesCollection = db.collection("activities");
+          const activity = await activitiesCollection.findOne({
+            _id: new mongo.ObjectID(activityId)
+          });
+          return activity;
+        }
       }
     }
   });
