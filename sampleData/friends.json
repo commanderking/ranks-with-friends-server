@@ -1,5 +1,6 @@
 [
   {
+    "_id": { "$oid": "5b9d83af36437b9095cc3121" },
     "username": "kgeezer",
     "password": "kekekekekeweazer",
     "firstName": "Allison",
@@ -10,9 +11,21 @@
     "pendingActivities": []
   },
   {
+    "_id": { "$oid": "5b9d83af36437b9095cc3122" },
     "username": "koolkingkat",
     "password": "kingkoolrool",
     "firstName": "Jeffrey",
+    "lastName": "King",
+    "image": "",
+    "myActivities": [],
+    "friendActivities": ["5b9d837ee7179a7a9fc653fc"],
+    "pendingActivities": []
+  },
+  {
+    "_id": { "$oid": "5ba4414936437b9095fc6144" },
+    "username": "linking",
+    "password": "superstressed",
+    "firstName": "Lin",
     "lastName": "King",
     "image": "",
     "myActivities": [],
