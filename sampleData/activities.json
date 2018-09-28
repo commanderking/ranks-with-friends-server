@@ -14,6 +14,100 @@
       {
         "itemId": "3",
         "name": "Rebecca"
+      },
+      {
+        "itemId": "4",
+        "name": "The Great Gatsby"
+      },
+      {
+        "itemId": "5",
+        "name": "The Scarlet Letter"
+      },
+      {
+        "itemId": "6",
+        "name": "The Adventures of Huckleberry Finn"
+      },
+      {
+        "itemId": "7",
+        "name": "Of Mice and Men"
+      },
+      {
+        "itemId": "8",
+        "name": "To Kill a Mockingbird"
+      },
+      {
+        "itemId": "9",
+        "name": "The Catcher in the Rye"
+      },
+      {
+        "itemId": "10",
+        "name": "The Grapes of Wrath"
+      },
+      {
+        "itemId": "11",
+        "name": "Their Eyes Were Watching God"
+      },
+      {
+        "itemId": "12",
+        "name": "The Crucible"
+      },
+      {
+        "itemId": "13",
+        "name": "Ethan Frome"
+      },
+      {
+        "itemId": "14",
+        "name": "Fahrenheit 451"
+      },
+      {
+        "itemId": "15",
+        "name": "The Red Badge of Courage"
+      },
+      {
+        "itemId": "16",
+        "name": "The House on Mango Street"
+      },
+      {
+        "itemId": "17",
+        "name": "A Separate Piece"
+      },
+      {
+        "itemId": "18",
+        "name": "The Sun Also Rises"
+      },
+      {
+        "itemId": "20",
+        "name": "Anthem"
+      },
+      {
+        "itemId": "21",
+        "name": "The Old Man and the Sea"
+      },
+      {
+        "itemId": "22",
+        "name": "One Flew over the Cuckoo's Next"
+      },
+      {
+        "itemId": "23",
+        "name": "Catch-22"
+      }
+    ]
+  },
+  {
+    "title": "Fruits",
+    "ratingType": "Tiers",
+    "items": [
+      {
+        "itemId": "1",
+        "name": "Grapefruit"
+      },
+      {
+        "itemId": "2",
+        "name": "Banana"
+      },
+      {
+        "itemId": "3",
+        "name": "Guava"
       }
     ]
   }

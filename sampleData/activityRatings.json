@@ -23,15 +23,15 @@
     "ratings": [
       {
         "itemId": "1",
-        "rating": "A+"
+        "rating": "A"
       },
       {
         "itemId": "2",
-        "rating": "C+"
+        "rating": "C"
       },
       {
         "itemId": "3",
-        "rating": "B+"
+        "rating": "B"
       }
     ]
   }
