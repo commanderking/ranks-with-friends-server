@@ -1,7 +1,7 @@
 var express = require("express");
 var graphqlHTTP = require("express-graphql");
 var graphql = require("graphql");
-var { generateSchemaWithDB } = require("./schema");
+var { schema } = require("./schema");
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 
@@ -33,8 +33,11 @@ MongoClient.connect(
     app.use(
       "/graphql",
       graphqlHTTP({
-        schema: generateSchemaWithDB(db),
-        graphiql: true
+        schema,
+        graphiql: true,
+        context: {
+          db
+        }
       })
     );
     app.listen(4000, () => console.log("Now browse to localhost:4000/graphql"));
