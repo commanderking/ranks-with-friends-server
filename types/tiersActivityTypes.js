@@ -68,14 +68,14 @@ const Rating = new GraphQLObjectType({
   fields: RatingFields
 });
 
-const RatingWithFriendInfo = (db, name) =>
+const RatingWithFriendInfo = name =>
   new GraphQLObjectType({
     name: `RatingWithFriendInfo${name}`,
     fields: {
       ...RatingFields,
       friendInfo: {
         type: Friend,
-        resolve: async activity => {
+        resolve: async (activity, args, { db }) => {
           const friendsCollection = db.collection("friends");
           return await friendsCollection.findOne({
             _id: new mongo.ObjectID(activity.friendId)
@@ -101,7 +101,7 @@ const ActivityItem = new GraphQLObjectType({
   }
 });
 
-const ActivityFields = (db, name) => ({
+const ActivityFields = name => ({
   id: {
     type: GraphQLNonNull(GraphQLString),
     resolve: activity => activity._id.toString()
@@ -114,9 +114,9 @@ const ActivityFields = (db, name) => ({
   },
   activityRatings: {
     type: new GraphQLNonNull(
-      GraphQLList(GraphQLNonNull(RatingWithFriendInfo(db, name)))
+      GraphQLList(GraphQLNonNull(RatingWithFriendInfo(name)))
     ),
-    resolve: async activity => {
+    resolve: async (activity, args, { db }) => {
       const activityId = activity._id;
       const ratingsCollection = db.collection("activityRatings");
       const ratings = await ratingsCollection
@@ -129,11 +129,10 @@ const ActivityFields = (db, name) => ({
   }
 });
 
-const Activity = db =>
-  new GraphQLObjectType({
-    name: "Activity",
-    fields: ActivityFields(db, "Query")
-  });
+const Activity = new GraphQLObjectType({
+  name: "Activity",
+  fields: ActivityFields("Query")
+});
 
 module.exports = {
   TierActivity,
