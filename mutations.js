@@ -55,6 +55,38 @@ const mutation = new GraphQLObjectType({
           deletedCount: deletedResult.deletedCount
         };
       }
+    },
+    updateActivityRatings: {
+      type: new GraphQLObjectType({
+        name: "UpdateActivityRatings",
+        fields: {
+          matchedCount: { type: GraphQLString }
+        }
+      }),
+      args: {
+        activityId: { type: GraphQLNonNull(GraphQLString) },
+        friendId: { type: GraphQLNonNull(GraphQLString) },
+        itemRatings: {
+          type: GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: async (_, { activityId, friendId, itemRatings }, { db }) => {
+        const itemRatingsJSON = JSON.parse(itemRatings);
+        // TODO: Error handling for when insertion does not work
+        console.log("itemRatingsJson", itemRatingsJSON);
+        const insertedItem = await db.collection("activityRatings").updateOne(
+          {
+            activityId,
+            friendId
+          },
+          {
+            $set: {
+              itemRatings: itemRatingsJSON
+            }
+          }
+        );
+        return insertedItem.matchedCount;
+      }
     }
   }
 });
