@@ -74,7 +74,7 @@ const mutation = new GraphQLObjectType({
         const itemRatingsJSON = JSON.parse(itemRatings);
         // TODO: Error handling for when insertion does not work
         console.log("itemRatingsJson", itemRatingsJSON);
-        const insertedItem = await db.collection("activityRatings").updateOne(
+        const updatedItem = await db.collection("activityRatings").updateOne(
           {
             activityId,
             friendId
@@ -85,7 +85,8 @@ const mutation = new GraphQLObjectType({
             }
           }
         );
-        return insertedItem.matchedCount;
+        console.log("updatedItem", updatedItem);
+        return updatedItem.matchedCount;
       }
     }
   }
