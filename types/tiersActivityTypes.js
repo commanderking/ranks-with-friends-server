@@ -134,6 +134,11 @@ const Activity = new GraphQLObjectType({
   fields: ActivityFields("Query")
 });
 
+const UserInfo = new GraphQLObjectType({
+  name: "UserInfo",
+  fields: FriendFields
+});
+
 module.exports = {
   TierActivity,
   Friend,
@@ -142,5 +147,6 @@ module.exports = {
   FriendRating,
   Rating,
   RatingFields,
-  RatingWithFriendData
+  RatingWithFriendData,
+  UserInfo
 };

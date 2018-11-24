@@ -9,7 +9,8 @@ const { FriendRatings } = require("./TestData");
 const {
   TierActivity,
   Friend,
-  Activity
+  Activity,
+  UserInfo
 } = require("./types/tiersActivityTypes");
 const { mutation } = require("./mutations");
 const mongo = require("mongodb");
@@ -50,6 +51,18 @@ const query = new GraphQLObjectType({
           _id: new mongo.ObjectID(activityId)
         });
         return activity;
+      }
+    },
+    getUserInfo: {
+      type: UserInfo,
+      args: {
+        userId: { type: GraphQLNonNull(GraphQLString) }
+      },
+      resolve: async (_, { userId }, { db }) => {
+        const friendsCollection = db.collection("friends");
+        return await friendsCollection.findOne({
+          _id: new mongo.ObjectID(userId)
+        });
       }
     }
   }
