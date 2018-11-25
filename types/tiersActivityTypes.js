@@ -31,7 +31,10 @@ const TierActivity = new GraphQLObjectType({
 });
 
 const FriendFields = {
-  id: { type: GraphQLNonNull(GraphQLString) },
+  id: {
+    type: GraphQLNonNull(GraphQLString),
+    resolve: activity => mongo.ObjectID(activity._id).toString()
+  },
   username: { type: GraphQLNonNull(GraphQLString) },
   firstName: { type: GraphQLString },
   lastName: { type: GraphQLString },
