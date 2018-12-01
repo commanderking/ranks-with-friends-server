@@ -1,5 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require("graphql");
 // TODO: This should probably be in a more central location that both Query and Mutations can use
+const { createActivity } = require("./fields/activity");
 
 const mutation = new GraphQLObjectType({
   name: "Mutations",
@@ -88,7 +89,8 @@ const mutation = new GraphQLObjectType({
         console.log("updatedItem", updatedItem);
         return updatedItem.matchedCount;
       }
-    }
+    },
+    createActivity: createActivity()
   }
 });
 
