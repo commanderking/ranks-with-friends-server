@@ -1,6 +1,5 @@
 const {
   GraphQLObjectType,
-  GraphQLInputObjectType,
   GraphQLString,
   GraphQLNonNull,
   GraphQLList
@@ -42,11 +41,7 @@ const createActivity = () => ({
     { friendId, title, ratingType, description, items },
     { db }
   ) => {
-    console.log("friendId", friendId);
-
-    console.log("items", items);
     const itemRatingsJSON = JSON.parse(items);
-    console.log(itemRatingsJSON);
     // TODO: Error handling for when insertion does not work
 
     const insertedItem = await db.collection("activities").insertOne({
