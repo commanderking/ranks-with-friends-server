@@ -24,7 +24,7 @@ const createActivity = () => ({
     ratingType: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
     items: {
-      type: new GraphQLList(GraphQLString)
+      type: GraphQLNonNull(GraphQLString)
       // This is what I want, but seems difficult to pass object
       /*
       type: new GraphQLList(
@@ -41,7 +41,7 @@ const createActivity = () => ({
     { friendId, title, ratingType, description, items },
     { db }
   ) => {
-    const itemRatingsJSON = JSON.parse(items);
+    const parsedItems = JSON.parse(items);
     // TODO: Error handling for when insertion does not work
 
     const insertedItem = await db.collection("activities").insertOne({
@@ -49,7 +49,7 @@ const createActivity = () => ({
       title,
       ratingType,
       description,
-      itemRatings: itemRatingsJSON
+      items: parsedItems
     });
     return {
       insertedId: insertedItem.insertedId.toString(),
