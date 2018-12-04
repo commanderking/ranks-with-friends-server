@@ -100,7 +100,8 @@ const ActivityItem = new GraphQLObjectType({
   name: "ActivityItem",
   fields: {
     itemId: { type: GraphQLNonNull(GraphQLString) },
-    name: { type: GraphQLNonNull(GraphQLString) }
+    name: { type: GraphQLNonNull(GraphQLString) },
+    link: { type: GraphQLString }
   }
 });
 
@@ -110,6 +111,7 @@ const ActivityFields = name => ({
     resolve: activity => activity._id.toString()
   },
   title: { type: GraphQLNonNull(GraphQLString) },
+  description: { type: GraphQLString },
   ratingType: { type: GraphQLNonNull(GraphQLString) },
   items: {
     type: new GraphQLNonNull(GraphQLList(GraphQLNonNull(ActivityItem))),
