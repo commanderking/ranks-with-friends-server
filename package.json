@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate:typescript": "gql-gen --schema http://localhost:4000/graphql --header 'Authorization: MY_KEY' --template graphql-codegen-typescript-template --out ./typings/ './src/**/*.graphql'",
     "heroku-prebuild": "npm install"
   },
   "author": "",
@@ -21,8 +20,6 @@
   "devDependencies": {
     "dotenv": "^6.0.0",
     "graphql": "^14.0.2",
-    "graphql-code-generator": "^0.14.5",
-    "graphql-codegen-typescript-template": "^0.14.5",
     "nodemon": "^1.18.4"
   }
 }
