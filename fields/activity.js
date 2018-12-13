@@ -19,7 +19,6 @@ const createActivity = () => ({
     }
   }),
   args: {
-    friendId: { type: GraphQLNonNull(GraphQLString) },
     title: { type: GraphQLNonNull(GraphQLString) },
     ratingType: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
@@ -36,16 +35,11 @@ const createActivity = () => ({
       */
     }
   },
-  resolve: async (
-    _,
-    { friendId, title, ratingType, description, items },
-    { db }
-  ) => {
+  resolve: async (_, { title, ratingType, description, items }, { db }) => {
     const parsedItems = JSON.parse(items);
     // TODO: Error handling for when insertion does not work
 
     const insertedItem = await db.collection("activities").insertOne({
-      friendId,
       title,
       ratingType,
       description,
